@@ -42,10 +42,3 @@ Include `rstack.h` in programs that use the library and link them with
 - `rstack_read` accepts unsigned decimal values separated by whitespace.
   `rstack_write` serializes reachable numeric values from the bottom of the
   stack toward the top.
-
-## Known limitation
-
-`rstack_write` detects a cycle while traversing a graph, but currently may
-return success after detecting it and leave a partial output file. Do not rely
-on its return value to detect cyclic input until this is corrected in
-`rstack.c`.
