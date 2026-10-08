@@ -12,9 +12,3 @@ during cleanup to prevent memory leaks.
 The source also provides operations for creating stacks, pushing and popping
 elements, checking whether a stack is empty, accessing and searching values,
 counting cycles recursively, and reading or writing stack values to files.
-
-## Source
-
-`rstack.c` contains the implementation. It includes `rstack.h`, which is not
-included in this repository, so the matching header is required to compile the
-library.
