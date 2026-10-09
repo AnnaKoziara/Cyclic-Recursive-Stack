@@ -42,54 +42,6 @@ cc -std=c23 -shared -fPIC -o librstack.so rstack.c    # Linux / macOS
 | `rstack_read` | `rstack_t* rstack_read(char const *path)` | Reads whitespace-separated decimal integers from a file into a new stack. Rejects leading zeros and values exceeding `UINT64_MAX`. Returns `nullptr` on error. |
 | `rstack_write` | `int rstack_write(char const *path, rstack_t *rs)` | Writes all reachable numeric values to a file (bottom-to-top order, one per line). Stops at cycles. Returns `0` on success, `-1` on error. |
 
-## Usage Example
-
-```c
-#include "rstack.h"
-#include <stdio.h>
-#include <inttypes.h>
-
-int main(void) {
-    // Create two stacks
-    rstack_t *a = rstack_new();
-    rstack_t *b = rstack_new();
-
-    // Push values onto stack b
-    rstack_push_value(b, 10);
-    rstack_push_value(b, 20);
-
-    // Push stack b as an element of stack a, then push a value on top
-    rstack_push_rstack(a, b);
-    rstack_push_value(a, 42);
-
-    // Front returns the first reachable numeric value (42)
-    result_t r = rstack_front(a);
-    if (r.flag) {
-        printf("front = %" PRIu64 "\n", r.value);  // 42
-    }
-
-    // Serialize to file
-    rstack_write("output.txt", a);
-
-    // Clean up - cycle detection handles the mutual references
-    rstack_delete(a);
-    rstack_delete(b);
-
-    // Read back from file
-    rstack_t *loaded = rstack_read("output.txt");
-    if (loaded) {
-        while (!rstack_empty(loaded)) {
-            result_t v = rstack_front(loaded);
-            if (v.flag) printf("%" PRIu64 "\n", v.value);
-            rstack_pop(loaded);
-        }
-        rstack_delete(loaded);
-    }
-
-    return 0;
-}
-```
-
 ## Key Concepts
 
 ### Reference Counting
