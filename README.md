@@ -1,16 +1,16 @@
 # rstack
 
-A C23 library implementing **recursive stacks** — a stack data structure whose elements can be either 64-bit unsigned integers (`uint64_t`) or references to other stacks, enabling the construction of arbitrary nested and cyclic directed graphs.
+A C23 library implementing **recursive stacks** - a stack data structure whose elements can be either 64-bit unsigned integers (`uint64_t`) or references to other stacks, enabling the construction of arbitrary nested and cyclic directed graphs.
 
 Memory management uses **reference counting** combined with **cycle detection** (inspired by the trial deletion algorithm) to identify and reclaim isolated subgraphs without leaks.
 
 ## Features
 
-- **Heterogeneous elements** — push numeric values or entire stacks onto a stack
-- **Cycle-safe memory management** — reference counting with automatic detection and collection of isolated cyclic subgraphs
-- **Value-oriented reachability** — `rstack_empty` and `rstack_front` traverse the graph depth-first, operating on reachable numeric values rather than raw node counts
-- **File I/O** — serialize numeric values to a file and deserialize them back into a new stack
-- **Robust error handling** — all functions report errors via return values and `errno`
+- **Heterogeneous elements** - push numeric values or entire stacks onto a stack
+- **Cycle-safe memory management** - reference counting with automatic detection and collection of isolated cyclic subgraphs
+- **Value-oriented reachability** - `rstack_empty` and `rstack_front` traverse the graph depth-first, operating on reachable numeric values rather than raw node counts
+- **File I/O** - serialize numeric values to a file and deserialize them back into a new stack
+- **Robust error handling** - all functions report errors via return values and `errno`
 
 ## Build
 
@@ -71,7 +71,7 @@ int main(void) {
     // Serialize to file
     rstack_write("output.txt", a);
 
-    // Clean up — cycle detection handles the mutual references
+    // Clean up - cycle detection handles the mutual references
     rstack_delete(a);
     rstack_delete(b);
 
@@ -103,9 +103,9 @@ int main(void) {
 
 When `rstack_delete` is called on a stack that still has references but contains stack-type elements, the library runs a three-phase algorithm:
 
-1. **Mark Grey** — recursively decrement reference counts of all reachable stacks (trial deletion)
-2. **Search for isolated cycles** — if a stack's count dropped to 0, it belongs to an isolated subgraph (mark white); otherwise, restore it (revert to black)
-3. **Delete white stacks** — free all stacks marked white (the isolated cycle)
+1. **Mark Grey** - recursively decrement reference counts of all reachable stacks (trial deletion)
+2. **Search for isolated cycles** - if a stack's count dropped to 0, it belongs to an isolated subgraph (mark white); otherwise, restore it (revert to black)
+3. **Delete white stacks** - free all stacks marked white (the isolated cycle)
 
 This ensures that cyclic graphs like `A → B → A` are properly collected when no external references remain.
 
@@ -113,9 +113,9 @@ This ensures that cyclic graphs like `A → B → A` are properly collected when
 
 `rstack_front` and `rstack_empty` perform a depth-first search through nested stacks to find numeric values. Visited stacks are colored to prevent infinite loops in cyclic graphs:
 
-- **Grey** — currently being visited (cycle detected, skip)
-- **White** — already searched, contains no values (skip)
-- **Black** — default state (search this stack)
+- **Grey** - currently being visited (cycle detected, skip)
+- **White** - already searched, contains no values (skip)
+- **Black** - default state (search this stack)
 
 ## Project Structure
 
