@@ -28,17 +28,6 @@ cc -std=c23 -shared -fPIC -o librstack.so rstack.c    # Linux / macOS
 
 ## API Reference
 
-### Types
-
-```c
-typedef struct rstack rstack_t;
-
-typedef struct {
-    bool     flag;   // true if value is valid
-    uint64_t value;  // the actual result (only meaningful when flag == true)
-} result_t;
-```
-
 ### Functions
 
 | Function | Signature | Description |
@@ -120,7 +109,7 @@ When `rstack_delete` is called on a stack that still has references but contains
 
 This ensures that cyclic graphs like `A → B → A` are properly collected when no external references remain.
 
-### Value-Oriented Reachability
+### Value-Oriented Reachability:
 
 `rstack_front` and `rstack_empty` perform a depth-first search through nested stacks to find numeric values. Visited stacks are colored to prevent infinite loops in cyclic graphs:
 
@@ -148,10 +137,6 @@ All functions set `errno` on failure:
 
 Functions returning `int` use `0` for success and `-1` for failure.  
 `rstack_new` and `rstack_read` return `nullptr` on failure.
-
-## License
-
-This project does not currently specify a license.
 
 ## Author
 
